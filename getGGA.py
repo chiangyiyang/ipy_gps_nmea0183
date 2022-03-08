@@ -1,5 +1,6 @@
 from dataclasses import replace
 import serial
+from time import sleep
 
 
 def checkSum(msg):
@@ -42,10 +43,16 @@ def parseGGA(data):
 port = serial.Serial(port='COM5', baudrate=9600)
 print("GPS connected!")
 try:
-  while True:
-    data = port.read_until().decode("ascii")
-    if ("$GPGGA" in data) and (checkSum(data)):
-      print(parseGGA(data))
+  # while True:
+  #   data = port.read_until().decode("ascii")
+  #   if ("$GPGGA" in data) and (checkSum(data)):
+  #     print(parseGGA(data))
+  logs = None
+  with open('gps_log2.txt', 'r') as f:
+    logs = f.readlines()
+  for line in logs:
+    print(line)
+    sleep(1)
 except KeyboardInterrupt:
   port.close()
   print("GPS disconnected!")
